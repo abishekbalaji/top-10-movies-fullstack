@@ -1,0 +1,14 @@
+.navigation-container {
+  padding: 15px 80px;
+  display: flex;
+  justify-content: space-between;
+  #nav-brand-link {
+    margin: 0 40px 0 0;
+  }
+
+  .nav-links_container {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
