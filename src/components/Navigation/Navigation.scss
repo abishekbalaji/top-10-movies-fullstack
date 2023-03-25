@@ -10,5 +10,9 @@
     width: 40%;
     display: flex;
     justify-content: space-between;
+
+    .nav-sign-out-span {
+      cursor: pointer;
+    }
   }
 }
