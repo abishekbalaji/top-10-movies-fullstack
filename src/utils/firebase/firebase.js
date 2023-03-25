@@ -8,6 +8,8 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+
 const firebaseConfig = {
   apiKey: "AIzaSyA26toHY1vs2n8nSXH3vsqNU0VySz5V4_k",
   authDomain: "top-10-movies-c7a6f.firebaseapp.com",
@@ -20,6 +22,8 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 const auth = getAuth();
+
+const db = getFirestore();
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -34,3 +38,29 @@ export const signInUserWithGooglePopup = async () =>
   await signInWithPopup(auth, googleProvider);
 
 export const signOutUser = async () => await signOut(auth);
+
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  otherDetails = {}
+) => {
+  if (!userAuth) return;
+  const userRef = doc(db, "users", userAuth.uid);
+  const userSnapshot = await getDoc(userRef);
+
+  if (!userSnapshot.exists()) {
+    const createdAt = new Date();
+    const { displayName, email } = userAuth;
+    const userObj = {
+      displayName,
+      email,
+      createdAt,
+      ...otherDetails,
+    };
+    try {
+      await setDoc(userRef, userObj);
+    } catch (error) {
+      console.log("Error creating the user!", error.message);
+    }
+  }
+  return userRef;
+};

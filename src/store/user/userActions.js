@@ -1,4 +1,5 @@
 import {
+  createUserDocumentFromAuth,
   signInUserWithGooglePopup,
   signOutUser,
 } from "../../utils/firebase/firebase";
@@ -19,6 +20,9 @@ export const signInWithGoogleAsync = () => async (dispatch) => {
   try {
     const user = await signInUserWithGooglePopup();
     console.log(user.user);
+    if (user) {
+      await createUserDocumentFromAuth(user.user);
+    }
     dispatch(fetchCurrentUserSuccess(user.user));
   } catch (error) {
     console.log(error);
