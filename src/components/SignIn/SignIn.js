@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signInWithGoogleAsync } from "../../store/user/userActions";
+import {
+  signInWithEmailAndPasswordAsync,
+  signInWithGoogleAsync,
+} from "../../store/user/userActions";
 import Button from "../Button/Button";
 import FormInput from "../FormInput/FormInput";
 import "./SignIn.scss";
@@ -22,11 +25,16 @@ const SignIn = () => {
 
   const handleGoogleSignIn = async () => dispatch(signInWithGoogleAsync());
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(signInWithEmailAndPasswordAsync(email, password));
+  };
+
   return (
     <>
       <h2>Already have an account?</h2>
       <span>Sign In</span>
-      <form>
+      <form onSubmit={handleSubmit}>
         <FormInput
           classes="form-input-custom"
           name="email"

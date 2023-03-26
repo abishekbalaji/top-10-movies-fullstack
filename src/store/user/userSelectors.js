@@ -11,3 +11,8 @@ export const selectIsUserLoading = createSelector(
   [userReducer],
   (userSlice) => userSlice.isLoading
 );
+
+export const selectUserError = createSelector(
+  [userReducer],
+  (userSlice) => userSlice.error
+);

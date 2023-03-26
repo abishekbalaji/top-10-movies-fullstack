@@ -1,5 +1,7 @@
 import {
+  createUserAuthWithEmailAndPassword,
   createUserDocumentFromAuth,
+  signInAuthUserWithEmailAndPassword,
   signInUserWithGooglePopup,
   signOutUser,
 } from "../../utils/firebase/firebase";
@@ -23,12 +25,38 @@ export const signInWithGoogleAsync = () => async (dispatch) => {
     if (user) {
       await createUserDocumentFromAuth(user.user);
     }
-    dispatch(fetchCurrentUserSuccess(user.user));
+    // dispatch(fetchCurrentUserSuccess(user.user));
   } catch (error) {
     console.log(error);
     dispatch(fetchCurrentUserFailed(error));
   }
 };
+
+export const signInWithEmailAndPasswordAsync =
+  (email, password) => async (dispatch) => {
+    dispatch(fetchCurrentUserStart());
+    try {
+      await signInAuthUserWithEmailAndPassword(email, password);
+    } catch (error) {
+      console.log(error);
+      dispatch(fetchCurrentUserFailed(error));
+    }
+  };
+
+export const createUserWithEmailAndPasswordAsync =
+  (email, password, displayName) => async (dispatch) => {
+    dispatch(fetchCurrentUserStart());
+    try {
+      const user = await createUserAuthWithEmailAndPassword(email, password);
+      if (user) {
+        await createUserDocumentFromAuth(user.user, { displayName });
+      }
+      // dispatch(fetchCurrentUserSuccess(user.user));
+    } catch (error) {
+      console.log(error);
+      dispatch(fetchCurrentUserFailed(error));
+    }
+  };
 
 export const signOutUserAsync = () => async (dispatch) => {
   dispatch(fetchCurrentUserStart());
